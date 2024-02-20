@@ -2,11 +2,12 @@
 #include <string>
 #include <random>
 #include <fstream>
+#include <Windows.h>
 
 using namespace std;
 
 
-int id_gen() {
+string id_gen() {
 	int id1;
 	string id, id2;
 	for (int i = 0; i < 3; i++) {
@@ -15,24 +16,29 @@ int id_gen() {
 		id = to_string(id1) + id2;
 		cout << id;
 	}
-	return stoi(id);
+	return id;
 }
 
 struct person {
-	char* name = new char[20];
-	char* last_name = new char[20];
+	char* name;
+	char* last_name;
 };
 
 struct p_atribute {
 	struct person p;
-	char* sex = new char[10];
-	char* bdate = new char[11];
+	char* sex;
+	char* bdate;
 };
 
 int main() {
-	setlocale(LC_ALL, "ru_RU.UTF-8");
-	srand((NULL));
-	char a[20], b[20], c[10], d[11];
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	setlocale(LC_ALL, "rus");
+	srand(time(NULL));
+	char* a = new char[20];
+	char* b = new char[20];
+	char* c = new char[10];
+	char* d = new char[11];
 	cout << "Введите ваше имя: ";
 	cin >> a;
 	cout << "Введите вашу фамилию: ";
@@ -49,12 +55,16 @@ int main() {
 	cout << "Пол: " << pers.sex << endl;
 	cout << "Дата рожения: " << pers.bdate << endl;
 	cout << "Вам присвоен id: ";
-	id_gen();
+	string id = id_gen();
 
 	fstream f;
-	f.open("1.xls", ios::out);
+	f.open("1.xls", ios::app);
 	f << "Имя" << "\t" << "Фамилия" << "\t" << "Пол" << "\t" << "Дата рождения" << "\t" << "ID" << endl;
-	f << pers.p.name << "\t" << pers.p.last_name << "\t" << pers.sex << "\t" << pers.bdate << "\t" << id_gen();
+	f << pers.p.name << "\t" << pers.p.last_name << "\t" << pers.sex << "\t" << pers.bdate << "\t" << id;
 	f.close();
-	return 0;
+	free(a);
+	free(b);
+	free(c);
+	free(d);
+	return 0;	
 }
